@@ -21,17 +21,14 @@ public class Collider extends Actor
     CollisionManager cm;
     int worldWidth;
     int worldHeight;
-    List<Collider> ongoingCollisions;
-    List<Collider> collidingObjects;
-    int ongoingCollisionsSize = 0;
-    int collidingObjectsSize = 0;
     static int numberOfColliders = 0;
     int index;
-    public Collider(int size){
+
+    
+    public Collider(int size, int deltaX, int deltaY){
         this.size = size;
-        ongoingCollisions = new ArrayList<>();
-        deltaX = rnd.nextInt(10)-5;
-        deltaY = rnd.nextInt(10)-5;
+        deltaX = deltaX;
+        deltaY = deltaY;
         img = new GreenfootImage(size,size);
         img.setColor(
             new Color(
@@ -45,7 +42,7 @@ public class Collider extends Actor
         this.index = numberOfColliders;
         numberOfColliders++;
     }
-    
+
     public void addedToWorld(World w){
         pw = (PhysicsWorld)getWorld();
         cm = pw.getCollisionManager();
@@ -59,7 +56,7 @@ public class Collider extends Actor
      */
     public void act() 
     {
-        setLocation(getX() + deltaX, getY() + deltaY);
+        newPosition();
         if(getX()<=size && deltaX < 0){
             deltaX*=-1;
         }
@@ -72,20 +69,11 @@ public class Collider extends Actor
         if(getY()>=worldHeight-size && deltaY>0){
             deltaY *= -1;
         }
-        collidingObjects = (List<Collider>)getIntersectingObjects(Collider.class);
-       
-        ongoingCollisionsSize = ongoingCollisions.size();
-        collidingObjectsSize = collidingObjects.size();
-        ongoingCollisions.retainAll(collidingObjects);
-        collidingObjects.removeAll(ongoingCollisions);
-        collidingObjectsSize = collidingObjects.size();
-        ongoingCollisionsSize = ongoingCollisions.size();
+        List<Collider>collidingObjects = (List<Collider>)getIntersectingObjects(Collider.class);
                             
         if(!collidingObjects.isEmpty()){
             cm.addCollidingObjects(this, collidingObjects);
         }
-        ongoingCollisions.addAll(collidingObjects);
-        collidingObjects.clear();
     }    
     
     public void setDeltaX(int newDeltaX){
@@ -102,6 +90,10 @@ public class Collider extends Actor
     }
     public int getSize(){
         return size;
+    }
+    
+    public void newPosition(){
+        setLocation(getX() + deltaX, getY() + deltaY);
     }
     
     @Override

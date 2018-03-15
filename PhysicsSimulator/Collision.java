@@ -27,7 +27,7 @@ public class Collision
         collidingObjects.addAll(otherObjs);
     }
     
-    public List<Collider> processCollision(){
+    public void processCollision(){
         int xVector = 0;
         int yVector = 0;
         for(Collider collider:collidingObjects){
@@ -35,10 +35,10 @@ public class Collision
             yVector += collider.getDeltaY()*collider.getSize();
         }
         for(Collider collider:collidingObjects){
-            collider.setDeltaX(collider.getDeltaX()+xVector/collider.getSize());
-            collider.setDeltaY(collider.getDeltaY()+xVector/collider.getSize());
+            //collider.setDeltaX(collider.getDeltaX()+xVector/collider.getSize());
+            //collider.setDeltaY(collider.getDeltaY()+xVector/collider.getSize());
+            //collider.newPosition();
         }
-        return new ArrayList<Collider>(collidingObjects);
     }
     
     public void addCollider(Collider c){

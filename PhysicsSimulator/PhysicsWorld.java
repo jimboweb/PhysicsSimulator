@@ -38,9 +38,9 @@ public class PhysicsWorld extends World
      */
     private void prepare()
     {
-        Collider collider = new Collider(75);
+        Collider collider = new Collider(75, -2, -2);
         addObject(collider,256,236);
-        Collider collider2 = new Collider(100);
+        Collider collider2 = new Collider(100, 2, 2);
         addObject(collider2,250,150);
     }
 }
