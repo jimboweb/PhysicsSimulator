@@ -73,26 +73,18 @@ public class Collider extends Actor
             deltaY *= -1;
         }
         collidingObjects = (List<Collider>)getIntersectingObjects(Collider.class);
-        collidingObjectsSize = collidingObjects.size();
-        List<Collider> collidingObjectsFinal = new ArrayList();
-        Collections.copy(collidingObjects, collidingObjectsFinal);
-        List<Collider> ongoingCollisionsFinal = new ArrayList();
-        Collections.copy(ongoingCollisions, ongoingCollisionsFinal);
-        collidingObjects = collidingObjects.stream().
-                            filter(co->!(ongoingCollisionsFinal.contains(co))).
-                            collect(Collectors.toList());
+       
         ongoingCollisionsSize = ongoingCollisions.size();
-        ongoingCollisions = ongoingCollisions.stream().
-                            filter(oc->!(collidingObjectsFinal.contains(oc))).
-                            collect(Collectors.toList());
-        
         collidingObjectsSize = collidingObjects.size();
+        ongoingCollisions.retainAll(collidingObjects);
+        collidingObjects.removeAll(ongoingCollisions);
+        collidingObjectsSize = collidingObjects.size();
+        ongoingCollisionsSize = ongoingCollisions.size();
                             
         if(!collidingObjects.isEmpty()){
             cm.addCollidingObjects(this, collidingObjects);
         }
         ongoingCollisions.addAll(collidingObjects);
-        ongoingCollisionsSize = ongoingCollisions.size();
         collidingObjects.clear();
     }    
     
@@ -118,5 +110,15 @@ public class Collider extends Actor
             return false;
         Collider otherCollider = (Collider)other;
         return this.index == otherCollider.index;
+    }
+    
+    @Override
+    public int hashCode(){
+        int result = 17;
+        result = result * 31 + size;
+        result = result * 31 + index;
+        result = result * 31 + pw.hashCode();
+        result = result * 31 + cm.hashCode();
+        return result;
     }
 }

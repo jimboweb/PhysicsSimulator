@@ -41,6 +41,6 @@ public class PhysicsWorld extends World
         Collider collider = new Collider(75);
         addObject(collider,256,236);
         Collider collider2 = new Collider(100);
-        addObject(collider2,407,218);
+        addObject(collider2,250,150);
     }
 }
